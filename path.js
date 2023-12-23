@@ -29,10 +29,10 @@ function P(x, i, coord) {
 
 function f_x(t) {
     return P(T*t - Math.floor(T*t), Math.floor(T*t), 0);
-    //return 7*Math.sin(4*Math.PI*t*t) + 14*Math.cos(2*Math.PI*t*t);
+    //return 7*Math.sin(4*Math.PI*t*t) + 14*Math.cos(2*Math.PI*t*t); // you can change f_x(t)
 }
 
 function f_y(t) {
     return P(T*t - Math.floor(T*t), Math.floor(T*t), 1);
-    //return 7*Math.cos(2*Math.PI*t);
+    //return 7*Math.cos(2*Math.PI*t); // you can change f_y(t)
 }
