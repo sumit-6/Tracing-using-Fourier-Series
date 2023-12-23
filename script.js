@@ -1,4 +1,4 @@
-const N = 20;
+let N = 20;
 let time = 0;
 const dt = 0.0025;
 const scale = 0.05;
@@ -28,48 +28,97 @@ function index(x) {
     return N +1+ (x-1)/2;
 
 }
+let n = [];
+let Amplitude = [];
+let Theta = [];
 
-
-const n = [];
-
-for(let i = -N; i <= N; ++i){
-    n.push(i);
-}
-
-const Cx = n.map((n_iter) => {
-    const func1 = function (t) {
-        return Math.cos(2*Math.PI*n_iter*t)*f_x(t) + Math.sin(2*Math.PI*n_iter*t)*f_y(t);
-    }
-    const val = integral(func1, 0, 1, 0.0005);
-    //console.log(n_iter, " => C_x = ", val);
-    return val;
-});
-const Cy = n.map((n_iter) => {
-    const func1 = function (t) {
-        return Math.cos(2*Math.PI*n_iter*t)*f_y(t) - Math.sin(2*Math.PI*n_iter*t)*f_x(t);
-    }
-    const val = integral(func1, 0, 1, 0.0005);
-    //console.log(n_iter, " => C_y = ", val);
-    return val;
-});
-//console.log(Cx, Cy);
-
-const Amplitude = [];
-const Theta = [];
-
-for(let i = 0; i < Cx.length; ++i) {
-    Amplitude.push(Math.sqrt((Cx[i] * Cx[i]) + (Cy[i] * Cy[i])));
-    Theta.push(arg(Cx[i], Cy[i]));
-}
-console.log(Amplitude, Theta);
 
 function setup() {
     createCanvas(W, H);
+    N_slider = createSlider(2, 70, 25, 1); 
+      
+    // Set the position of slider on the canvas 
+    
+    N_slider.position(700, 100); 
+    N = N_slider.value()
+    N_slider.size(300)
+    
+    n = [];
+    for(let i = -N; i <= N; ++i){
+        n.push(i);
+    }
+
+    const Cx = n.map((n_iter) => {
+        const func1 = function (t) {
+            return Math.cos(2*Math.PI*n_iter*t)*f_x(t) + Math.sin(2*Math.PI*n_iter*t)*f_y(t);
+        }
+        const val = integral(func1, 0, 1, 0.0005);
+        //console.log(n_iter, " => C_x = ", val);
+        return val;
+    });
+    const Cy = n.map((n_iter) => {
+        const func1 = function (t) {
+            return Math.cos(2*Math.PI*n_iter*t)*f_y(t) - Math.sin(2*Math.PI*n_iter*t)*f_x(t);
+        }
+        const val = integral(func1, 0, 1, 0.0005);
+        //console.log(n_iter, " => C_y = ", val);
+        return val;
+    });
+    //console.log(Cx, Cy);
+    Amplitude = [];
+    Theta = [];
+   
+
+    for(let i = 0; i < Cx.length; ++i) {
+        Amplitude.push(Math.sqrt((Cx[i] * Cx[i]) + (Cy[i] * Cy[i])));
+        Theta.push(arg(Cx[i], Cy[i]));
+    }
     
 }
 
 function draw() {
     background(255);
+    beginShape();
+    textSize(40);
+    fill(0);
+    text(`N = ${N_slider.value()}`, 750, 85);
+    textSize(20);
+    text(`Number of circles = 2N + 1`, 890, 85);
+    endShape();
+    N_slider.changed(() => {
+        N = N_slider.value()
+        
+        n = [];
+        for(let i = -N; i <= N; ++i){
+            n.push(i);
+        }
+
+        const Cx = n.map((n_iter) => {
+            const func1 = function (t) {
+                return Math.cos(2*Math.PI*n_iter*t)*f_x(t) + Math.sin(2*Math.PI*n_iter*t)*f_y(t);
+            }
+            const val = integral(func1, 0, 1, 0.0005);
+            //console.log(n_iter, " => C_x = ", val);
+            return val;
+        });
+        const Cy = n.map((n_iter) => {
+            const func1 = function (t) {
+                return Math.cos(2*Math.PI*n_iter*t)*f_y(t) - Math.sin(2*Math.PI*n_iter*t)*f_x(t);
+            }
+            const val = integral(func1, 0, 1, 0.0005);
+            //console.log(n_iter, " => C_y = ", val);
+            return val;
+        });
+        //console.log(Cx, Cy);
+        Amplitude = [];
+        Theta = [];
+    
+
+        for(let i = 0; i < Cx.length; ++i) {
+            Amplitude.push(Math.sqrt((Cx[i] * Cx[i]) + (Cy[i] * Cy[i])));
+            Theta.push(arg(Cx[i], Cy[i]));
+        }
+    });
     strokeWeight(0.4);
     line(shiftX - W, shiftY, shiftX + W, shiftY);
     line(shiftX, shiftY - H, shiftX, shiftY + H);
