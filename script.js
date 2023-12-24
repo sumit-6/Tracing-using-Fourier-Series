@@ -4,6 +4,7 @@ const dt = 0.0025;
 const scale = 0.05;
 const W = 1450, H = 720;
 const shiftX = 380, shiftY = 355;
+const tracing = [];
 
 function integral(func, lowerLimit, upperLimit, dx) {
     let ans = 0;
@@ -35,7 +36,7 @@ let Theta = [];
 
 function setup() {
     createCanvas(W, H);
-    N_slider = createSlider(2, 70, 25, 1); 
+    N_slider = createSlider(2, 100, 25, 1); 
       
     // Set the position of slider on the canvas 
     
@@ -131,14 +132,14 @@ function draw() {
     }
 
     stroke(0);
-    strokeWeight(2);
+    strokeWeight(0.2);
     noFill();
     beginShape();
     for(let i = 0; i <= 1; i += dt) {
         vertex(shiftX + f_x(i)/scale, shiftY - f_y(i)/scale);
     }
     endShape();
-    strokeWeight(0.35);
+    strokeWeight(0.3);
     beginShape();
 
     let oldPx = 0, oldPy = 0;
@@ -154,8 +155,23 @@ function draw() {
             circle(shiftX + oldPx / scale,shiftY - oldPy / scale, Math.sqrt((Math.pow((Px - oldPx), 2) + Math.pow((Py - oldPy), 2))) / (0.5*scale));
         }
         oldPx = Px, oldPy = Py;
+        if(i === 2*N + 1) {
+            tracing.push([shiftX + Px / scale,shiftY -  Py / scale]);
+        }
     }
     endShape();
+    stroke(0);
+    strokeWeight(2);
+    noFill();
+    beginShape();
+    for(let i = 0; i < tracing.length; ++i) {
+        vertex(tracing[i][0], tracing[i][1]);
+    }
+    endShape();
+    strokeWeight(0);
     time += dt;
-    if(time > 1) time = 0;
+    if(time > 1) {
+        time = 0;
+        tracing.length = 0;
+    }
 }
