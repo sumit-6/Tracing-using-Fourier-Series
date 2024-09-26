@@ -2,7 +2,7 @@ let N = 20;
 let time = 0;
 const dt = 0.0025;
 const scale = 0.25;
-const W = 1450, H = 1000;
+const W = 2000, H = 1000;
 const shiftX = 500, shiftY = 500;
 const tracing = [];
 
@@ -37,13 +37,13 @@ let Theta = [];
 function setup() {
     createCanvas(W, H);
     // set background color as dark blue
-    background(29, 78, 216);
+    background(255);
     // set text color to white
     fill(255);
     N_slider = createSlider(2, 100, 25, 1); 
       
     // Set the position of slider on the canvas 
-    N_slider.position(shiftX - 240, shiftY - 300); 
+    N_slider.position(shiftX - 240, shiftY - 450); 
     N = N_slider.value()
     N_slider.size(300)
     
@@ -81,13 +81,13 @@ function setup() {
 }
 
 function draw() {
-    background(29, 78,216);
+    background(255);
     beginShape();
     textSize(40);
-    fill(255);
-    text(`N = ${N_slider.value()}`, shiftX - 240 + 40, shiftY - 300 + 50);
+    fill(0);
+    text(`N = ${N_slider.value()}`, shiftX - 240 + 40, shiftY - 450 + 50);
     textSize(20);
-    text(`Number of circles = 2N + 1 = ${2*N + 1}`, shiftX - 240 + 40, shiftY - 300 + 85);
+    text(`Number of circles = 2N + 1 = ${2*N + 1}`, shiftX - 240 + 40, shiftY - 450 + 75);
     endShape();
     N_slider.changed(() => {
         N = N_slider.value()
@@ -124,33 +124,31 @@ function draw() {
         }
     });
     strokeWeight(0.4);
-    stroke(255);
+    stroke(0);
     line(shiftX - W, shiftY, shiftX + W, shiftY);
     line(shiftX, shiftY - H, shiftX, shiftY + H);
     strokeWeight(0.1);
-    stroke(255);
+    stroke(0);
     for(let x = -H/2; x <= H/2; x += (H)/10) {
         line(shiftX - W, shiftY + x, shiftX + W, shiftY + x);
     }
     for(let y = -W/2; y <= W; y += (W)/20) {
         line(shiftX + y, shiftY - H, shiftX + y, shiftY + H);
     }
+    
 
-    stroke(255);
-    strokeWeight(0.2);
-
-    noFill();
+    
     beginShape();
-    // set vertex color to white
-    stroke(255);
+    fill(37, 99, 235);
     for(let i = 0; i <= 1; i += dt) {
         vertex(shiftX + f_x(i)/scale, shiftY - f_y(i)/scale);
     }
     endShape();
-    strokeWeight(0.3);
     
+    strokeWeight(0.6);
+    noFill();
     beginShape();
-    stroke(255);
+    stroke(0);
 
     let oldPx = 0, oldPy = 0;
     vertex(shiftX + oldPx / scale, shiftY - oldPy / scale);
@@ -170,11 +168,12 @@ function draw() {
         }
     }
     endShape();
+    
     stroke(0);
-    strokeWeight(2);
+    strokeWeight(3);
     noFill();
     beginShape();
-    stroke(255);
+    stroke(0);
     for(let i = 0; i < tracing.length; ++i) {
         vertex(tracing[i][0], tracing[i][1]);
     }
